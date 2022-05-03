@@ -18,7 +18,7 @@ def get_sales_data():
     """
     Get sales figures input from the user.
     run a while loop to collect a valid string of data from the user
-    via the terminal, which must be a string of 6 numbers separted 
+    via the terminal, which must be a string of 6 numbers separted
     by commas. the loop will repeatedly request data till valid.
     """
     while True:
@@ -37,7 +37,6 @@ def get_sales_data():
     return sales_data
 
 
-
 def validate_data(values):
     """
     inside the try, converts all string values into integers.
@@ -46,7 +45,7 @@ def validate_data(values):
     """
     try:
         [int(value) for value in values]
-        if len(values)!=6:
+        if len(values) != 6:
             raise ValueError(
                 f"Exactly 6 values required, you provided {len(values)}"
             )
@@ -56,14 +55,16 @@ def validate_data(values):
 
     return True
 
-def update_sales_worksheet(data):
+
+def update_worksheet(data, worksheet):
     """
-    update sales worksheet, add new row with the list data provided.
+    receivesa list of inters to be inserted to a worksheet
+    update the relevent worksheet with the data provided
     """
-    print("updating worksheet...\n")
-    sales_worksheet = SHEET.worksheet("sales")
-    sales_worksheet.append_row(data)
-    print("sales worksheet updated successfully.\n")
+    print(f"Updating {worksheet} worksheet...\n")
+    worksheet_to_update = SHEET.worksheet(worksheet)
+    worksheet_to_update.append_row(data)
+    print(f"{worksheet} worksheet updated successfully\n")
 
 
 def calculate_surplus_data(sales_row):
@@ -82,17 +83,7 @@ def calculate_surplus_data(sales_row):
     for stock, sales in zip(stock_row, sales_row):
         surplus = int(stock) - sales
         surplus_data.append(surplus)
-    
     return surplus_data
-
-def update_surplus_worksheet(data):
-    """
-    update surplus worksheet, add new row with the list data provided.
-    """
-    print("updating surplus worksheet...\n")
-    sales_worksheet = SHEET.worksheet("surplus")
-    sales_worksheet.append_row(data)
-    print("surplus worksheet updated successfully.\n")
 
 
 def main():
@@ -101,9 +92,10 @@ def main():
     """
     data = get_sales_data()
     sales_data = [int(num) for num in data]
-    update_sales_worksheet(sales_data)
+    update_worksheet(sales_data, "sales")
     new_surplus_data = calculate_surplus_data(sales_data)
-    update_surplus_worksheet(new_surplus_data)
+    update_worksheet(new_surplus_data, "surplus")
+
 
 print("welcome to love sandwiches data Automation")
 main()
